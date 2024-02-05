@@ -1,0 +1,53 @@
+import { Schema, model } from "mongoose";
+
+export const brandSchema = new Schema({
+    name:{
+        type:String,
+        required:true,
+        unique:true,
+        lowercase:true
+    },
+    slug:{
+        type:String,
+        required:true,
+        unique:true,
+        lowercase:true
+    },
+    image:{
+        secure_url:{
+            type:String,
+            required:true
+        },
+        public_id:{
+            type:String,
+            required:true
+        }
+    },
+    createdBy:{
+        type:Schema.Types.ObjectId,
+        ref:'User',
+        required:true 
+    },
+    categoryId:{
+        type:Schema.Types.ObjectId,
+        ref:'Category',
+        required:true
+    },
+    subCategoryId:{
+        type:Schema.Types.ObjectId,
+        ref:'SubCategory',
+        required:true
+    },
+    customId:String
+},
+{
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true},
+    timestamps:true
+},)
+brandSchema.virtual('Products',{
+    ref:'Product',
+    localField:'_id',
+    foreignField:'brandId'
+})
+export const brandModel = model('Brand',brandSchema)
